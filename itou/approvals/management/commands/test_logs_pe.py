@@ -1,7 +1,7 @@
-from datetime import date, timedelta
-from random import choice
+from datetime import date
 from time import sleep
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from httpx import HTTPStatusError
 
@@ -14,6 +14,7 @@ from itou.utils.apis.pole_emploi import (
     PoleEmploiMiseAJourPassIAEAPI,
     PoleEmploiRechercheIndividuCertifieAPI,
 )
+
 
 class Command(BaseCommand):
     """
@@ -79,19 +80,18 @@ class Command(BaseCommand):
         except HTTPStatusError as error:
             print(error.response.content)
 
-    def synchronize_pass_iae(self):
-        api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_PRODUCTION_ROUTE
-        # api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_SANDBOX_ROUTE
-        token_recherche_et_maj = self.get_token(api_mode)
+    def dump_settings(self):
+        print(f"API_ESD_AUTH_BASE_URL: {settings.API_ESD_AUTH_BASE_URL}")
+        print(f"API_ESD_BASE_URL:      {settings.API_ESD_BASE_URL}")
+        print(f"API_ESD_KEY:           {settings.API_ESD_KEY}")
+        print(f"API_ESD_SECRET:        {settings.API_ESD_SECRET}")
 
+    def synchronize_pass_iae(self):
+        self.dump_settings()
+        api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_SANDBOX_ROUTE
+        token_recherche_et_maj = self.get_token(api_mode)
         individuals = [
-            # PoleEmploiIndividu("FRANCIS", "DOR", date(1960, 8, 23), "1600875048122"),
-            # PoleEmploiIndividu("BETTINA", "VOLUZAN", date(1973, 7, 4), "2730733039016"),
-            # PoleEmploiIndividu("GISELE", "HACHEMI", date(1956, 1, 7), "2560175024029"),
-            # PoleEmploiIndividu("SANDRA", "DOGNY", date(1978, 8, 12), "2780833063213"),
             PoleEmploiIndividu("Mickael", "AMIOTTE", date(1972, 1, 16), "1720117415062"),
-            # PoleEmploiIndividu("ROGER", "ANSAULT", date(1960, 9, 5), "1600933063034"),
-            # PoleEmploiIndividu("GAELL", "BRILLET", date(1966, 8, 4), "2660875113040"),
         ]
 
         for individual in individuals:
