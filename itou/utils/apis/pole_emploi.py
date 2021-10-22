@@ -233,12 +233,16 @@ class PoleEmploiMiseAJourPassIAEAPI:
             r = httpx.post(url, json=params, headers=headers)
             r.raise_for_status()
             data = r.json()
+            print(data)
         except httpx.HTTPError as e:
+            print(e.response.status_code)
+            print(e.response.text)
             if e.response.status_code == 401:
                 error = f"Error with code: {self.code_sortie()}"
             if e.response.status_code == 404:
                 # surprise !? PE's authentication layer can trigger 404
                 # if the scope does not allow access to this API
+                print(e.response.text)
                 error = "Authentication error"
             else:
                 # In general when input data cannot be processed, a 500 is returned

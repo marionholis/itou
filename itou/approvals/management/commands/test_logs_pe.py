@@ -1,3 +1,4 @@
+import pprint
 from datetime import date
 from time import sleep
 
@@ -87,14 +88,20 @@ class Command(BaseCommand):
         print(f"API_ESD_SECRET:        {settings.API_ESD_SECRET}")
 
     def synchronize_pass_iae(self):
+        pp = pprint.PrettyPrinter(indent=4)
         self.dump_settings()
-        api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_SANDBOX_ROUTE
+        # api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_SANDBOX_ROUTE
+        api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_PRODUCTION_ROUTE
         token_recherche_et_maj = self.get_token(api_mode)
         individuals = [
-            PoleEmploiIndividu("Mickael", "AMIOTTE", date(1972, 1, 16), "1720117415062"),
+            # (PoleEmploiIndividu("FARID", "ROCHDI", date(1968, 3, 3), "1680364445023"), 836, "PE"),
+            (PoleEmploiIndividu("MARIA", "LOPES", date(1962, 5, 2), "2620599039619"), 837, "CAP_EMPLOI"),
+            (PoleEmploiIndividu("CLAUDE", "CASTAGNAU", date(1965, 4, 12), "2650475114291"), 838, "ML"),
         ]
 
-        for individual in individuals:
+        for i in range(len(individuals)):
+            individual, code_siae, code_prescripteur = individuals[i]
+
             individual_pole_emploi = self.get_pole_emploi_individual(individual, token_recherche_et_maj)
             print(individual.first_name, individual.last_name)
             print("on poste sur l’API rechercherIndividuCertifie")
@@ -104,13 +111,15 @@ class Command(BaseCommand):
             print()
             if individual_pole_emploi.is_valid:
                 params = self.generate_sample_api_params(individual_pole_emploi.id_national_demandeur)
-                print(params)
+                params["typeSIAE"] = code_siae
+                params["typologiePrescripteur"] = code_prescripteur
+                pp.pprint(params)
                 try:
                     print("on poste sur l’API MiseAJourPass")
                     maj = PoleEmploiMiseAJourPassIAEAPI(params, token_recherche_et_maj, api_mode)
                     # 1 request/second max, taking a bit of margin here due to occasionnal timeouts
                     sleep(1.5)
-                    print(maj.code_sortie)
+                    print(maj.data)
 
                 except HTTPStatusError as error:
                     print(error.response.content)
