@@ -128,5 +128,56 @@ class Command(BaseCommand):
                     print(maj.data)
         print()
 
+    def synchronize_pass_iae_nov3(self):
+        # pp = pprint.PrettyPrinter(indent=4)
+        self.dump_settings()
+        # api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_SANDBOX_ROUTE
+        api_mode = PoleEmploiMiseAJourPassIAEAPI.USE_PRODUCTION_ROUTE
+        token_recherche_et_maj = self.get_token(api_mode)
+        individuals = [
+            PoleEmploiIndividu("PIERRE", "BALLAY", date(1969, 5, 3), "169059200700660"),
+            PoleEmploiIndividu("LARBI", "BOUKERMA BACHIR", date(1965, 3, 14), "165039935804935"),
+            PoleEmploiIndividu("CHRISTOPHE", "WAROUX", date(1963, 9, 29), "163097510412579"),
+            PoleEmploiIndividu("QUENTIN", "SYLVESTRE", date(1996, 4, 3), "196044732303431"),
+            PoleEmploiIndividu("LUCAS", "VILLATTE", date(1997, 3, 3), "197032432218776"),
+            PoleEmploiIndividu("ISABELLE", "LAVIALLE", date(1967, 4, 11), "267047836103209"),
+            PoleEmploiIndividu("PAOLO", "DE JESUS", date(1971, 10, 26), "171102452005024"),
+            PoleEmploiIndividu("JEAN-FRANCOIS", "VERGNE", date(1974, 11, 3), "174112452001129"),
+            PoleEmploiIndividu("FABIENNE", "CHEVALIER", date(1964, 6, 20), "264067724306041"),
+            PoleEmploiIndividu("CLAUDE", "CASTAGNAU", date(1965, 4, 12), "265047511429164"),
+            PoleEmploiIndividu("FARID", "ROCHDI", date(1968, 3, 3), "168036444502392"),
+            PoleEmploiIndividu("FRANCK", "SDEI", date(1965, 8, 23), "165080325417674"),
+            PoleEmploiIndividu("JEAN-PIERRE", "CAILLARD", date(1966, 9, 1), "166092432200134"),
+        ]
+
+        for i in range(len(individuals)):
+            individual = individuals[i]
+
+            individual_pole_emploi = self.get_pole_emploi_individual(individual, token_recherche_et_maj)
+            print(individual.first_name, individual.last_name)
+            # print("on poste sur l’API rechercherIndividuCertifie")
+            # print(individual.as_api_params())
+            # print("retour d’API:")
+            print(individual_pole_emploi.data)
+            # print()
+            # if individual_pole_emploi.is_valid:
+            #     params = self.generate_sample_api_params(individual_pole_emploi.id_national_demandeur)
+            #     params["typeSIAE"] = code_siae
+            #     params["typologiePrescripteur"] = code_prescripteur
+            #     pp.pprint(params)
+            #     try:
+            #         print("on poste sur l’API MiseAJourPass")
+            #         maj = PoleEmploiMiseAJourPassIAEAPI(params, token_recherche_et_maj, api_mode)
+            #         # 1 request/second max, taking a bit of margin here due to occasionnal timeouts
+            #         sleep(1.5)
+            #         print(maj.data)
+
+            #     except HTTPStatusError as error:
+            #         print(error.response.content)
+
+            #         print(individual.last_name)
+            #         print(maj.data)
+        print()
+
     def handle(self, dry_run=False, **options):
-        self.synchronize_pass_iae()
+        self.synchronize_pass_iae_nov3()

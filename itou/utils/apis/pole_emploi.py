@@ -15,7 +15,7 @@ class PoleEmploiIndividu:
         self.first_name = first_name.upper()
         self.last_name = last_name.upper()
         self.birthdate = birthdate.strftime("%Y-%m-%d")
-        self.nir = nir
+        self.nir = nir[0:13]
         assert self.is_valid()
 
     def is_valid(self):
