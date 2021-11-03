@@ -303,9 +303,9 @@ def step_create_job_seeker(request, siae_pk, template_name="apply/submit_step_jo
     Create a job seeker if he can't be found in the DB.
     """
     session_data = request.session[settings.ITOU_SESSION_JOB_APPLICATION_KEY]
-    siae = get_object_or_404(Siae, pk=session_data["to_siae_pk"])
+    siae = get_object_or_404(Siae, pk=session_data.get("to_siae_pk"))
 
-    nir = session_data["nir"]
+    nir = session_data.get("nir")
     form = CreateJobSeekerForm(
         proxy_user=request.user, nir=nir, data=request.POST or None, initial={"email": request.GET.get("email")}
     )
