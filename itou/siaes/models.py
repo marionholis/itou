@@ -9,6 +9,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlencode, urlsafe_base64_encode
 
 from itou.common_apps.address.models import AddressMixin
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.common_apps.organizations.models import MembershipAbstract, OrganizationAbstract, OrganizationQuerySet
 from itou.utils.emails import get_email_message
 from itou.utils.tokens import siae_signup_token_generator
@@ -163,7 +164,7 @@ class SiaeQuerySet(OrganizationQuerySet):
         )
 
 
-class Siae(AddressMixin, OrganizationAbstract):
+class Siae(AddressMixin, OrganizationAbstract, LoggingAdminHistoryAbstract):
     """
     Structures d'insertion par l'activité économique.
 
@@ -549,7 +550,7 @@ class SiaeJobDescription(models.Model):
         return reverse("siaes_views:job_description_card", kwargs={"job_description_id": self.pk})
 
 
-class SiaeConvention(models.Model):
+class SiaeConvention(LoggingAdminHistoryAbstract, models.Model):
     """
     A SiaeConvention encapsulates the ASP-specific logic to decide whether
     the siaes attached to this SiaeConvention are officially allowed

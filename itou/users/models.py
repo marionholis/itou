@@ -29,6 +29,7 @@ from itou.asp.models import (
 from itou.common_apps.address.departments import department_from_postcode
 from itou.common_apps.address.format import format_address
 from itou.common_apps.address.models import AddressMixin
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.institutions.models import Institution
 from itou.prescribers.models import PrescriberOrganization
 from itou.siaes.models import Siae
@@ -121,7 +122,7 @@ class ItouUserManager(UserManager):
         return result
 
 
-class User(AbstractUser, AddressMixin):
+class User(AbstractUser, AddressMixin, LoggingAdminHistoryAbstract):
     """
     Custom user model.
 

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 
 from itou.common_apps.address.models import AddressMixin
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.common_apps.organizations.models import MembershipAbstract, OrganizationAbstract, OrganizationQuerySet
 from itou.utils.emails import get_email_message
 from itou.utils.urls import get_absolute_url
@@ -39,7 +40,7 @@ class PrescriberOrganizationManager(models.Manager):
         return self.none()
 
 
-class PrescriberOrganization(AddressMixin, OrganizationAbstract):
+class PrescriberOrganization(AddressMixin, LoggingAdminHistoryAbstract, OrganizationAbstract):
     """
     The organization of a prescriber, e.g.: Pôle emploi, missions locales, Cap emploi etc.
 

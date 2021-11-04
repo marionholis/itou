@@ -17,6 +17,7 @@ from django.utils.safestring import mark_safe
 from unidecode import unidecode
 
 from itou.approvals.notifications import NewProlongationToAuthorizedPrescriberNotification
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.utils.models import DateRange
 from itou.utils.urls import get_external_link_markup
 from itou.utils.validators import alphanumeric
@@ -25,7 +26,7 @@ from itou.utils.validators import alphanumeric
 logger = logging.getLogger(__name__)
 
 
-class CommonApprovalMixin(models.Model):
+class CommonApprovalMixin(LoggingAdminHistoryAbstract, models.Model):
     """
     Abstract model for fields and methods common to both `Approval`
     and `PoleEmploiApproval` models.
@@ -381,7 +382,7 @@ class SuspensionQuerySet(models.QuerySet):
         return self.filter(end_at__lt=now)
 
 
-class Suspension(models.Model):
+class Suspension(LoggingAdminHistoryAbstract, models.Model):
     """
     A PASS IAE (or approval) issued by Itou can be directly suspended by an SIAE,
     without intervention of a prescriber or a posteriori control.
@@ -631,7 +632,7 @@ class ProlongationManager(models.Manager):
         return duration
 
 
-class Prolongation(models.Model):
+class Prolongation(LoggingAdminHistoryAbstract, models.Model):
     """
     Stores a prolongation made by an SIAE for a PASS IAE.
 

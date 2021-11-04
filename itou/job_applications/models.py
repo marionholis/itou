@@ -13,6 +13,7 @@ from django.utils import timezone
 from django_xworkflows import models as xwf_models
 
 from itou.approvals.models import Approval, Suspension
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.eligibility.models import EligibilityDiagnosis
 from itou.utils.emails import get_email_message
 from itou.utils.perms.user import KIND_JOB_SEEKER, KIND_PRESCRIBER, KIND_SIAE_STAFF
@@ -215,7 +216,7 @@ class JobApplicationQuerySet(models.QuerySet):
         )
 
 
-class JobApplication(xwf_models.WorkflowEnabled, models.Model):
+class JobApplication(LoggingAdminHistoryAbstract, xwf_models.WorkflowEnabled, models.Model):
     """
     A job application.
 

@@ -8,6 +8,7 @@ from django.db.models import Exists, OuterRef
 from django.utils import timezone
 
 from itou.approvals.models import Approval
+from itou.common_apps.admin.models import LoggingAdminHistoryAbstract
 from itou.utils.perms.user import KIND_PRESCRIBER, KIND_SIAE_STAFF
 
 
@@ -118,7 +119,7 @@ class EligibilityDiagnosisManager(models.Manager):
         return last
 
 
-class EligibilityDiagnosis(models.Model):
+class EligibilityDiagnosis(LoggingAdminHistoryAbstract, models.Model):
     """
     Store the eligibility diagnosis of a job seeker.
     """
