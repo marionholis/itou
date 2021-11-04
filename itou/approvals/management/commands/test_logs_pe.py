@@ -33,11 +33,12 @@ class Command(BaseCommand):
     API_DATE_FORMAT = "%Y-%m-%d"
 
     def generate_sample_api_params(self, encrypted_identifier):
-        approval_start_at = date(2021, 6, 1)
-        approval_end_at = date(2021, 7, 1)
+        approval_start_at = date(2021, 11, 1)
+        approval_end_at = date(2022, 7, 1)
         approved_pass = "A"
         approval_number = "999992139048"
         siae_siret = "42373532300044"
+        prescriber_siret = "36252187900034"
 
         return {
             "idNational": encrypted_identifier,
@@ -47,6 +48,7 @@ class Command(BaseCommand):
             "dateFinPassIAE": approval_end_at.strftime(self.API_DATE_FORMAT),
             "numPassIAE": approval_number,
             "numSIRETsiae": siae_siret,
+            "numSIRETprescripteur": prescriber_siret,
             "origineCandidature": PoleEmploiMiseAJourPass.sender_kind(JobApplication.SENDER_KIND_JOB_SEEKER),
         }
 
@@ -137,18 +139,22 @@ class Command(BaseCommand):
         individuals = [
             # individual, code SIAE, code prescripteur
             # (PoleEmploiIndividu("PIERRE", "BALLAY", date(1969, 5, 3), "169059200700660"), 836, "CIDFF"),
-            (PoleEmploiIndividu("LARBI", "BOUKERMA BACHIR", date(1965, 3, 14), "165039935804935"), 837, "OACAS"),
-            (PoleEmploiIndividu("CHRISTOPHE", "WAROUX", date(1963, 9, 29), "163097510412579"), 838, "ML"),
-            (PoleEmploiIndividu("QUENTIN", "SYLVESTRE", date(1996, 4, 3), "196044732303431"), 839, "DEPT"),
-            (PoleEmploiIndividu("LUCAS", "VILLATTE", date(1997, 3, 3), "197032432218776"), 840, "DEPT_BRSA"),
-            (PoleEmploiIndividu("ISABELLE", "LAVIALLE", date(1967, 4, 11), "267047836103209"), 836, "SPIP"),
-            (PoleEmploiIndividu("PAOLO", "DE JESUS", date(1971, 10, 26), "171102452005024"), 837, "CCAS"),
-            (PoleEmploiIndividu("JEAN-FRANCOIS", "VERGNE", date(1974, 11, 3), "174112452001129"), 838, "PLIE"),
-            (PoleEmploiIndividu("FABIENNE", "CHEVALIER", date(1964, 6, 20), "264067724306041"), 839, "CHRS"),
-            (PoleEmploiIndividu("CLAUDE", "CASTAGNAU", date(1965, 4, 12), "265047511429164"), 840, "PREVENTION"),
-            (PoleEmploiIndividu("FARID", "ROCHDI", date(1968, 3, 3), "168036444502392"), 836, "AFPA"),
-            (PoleEmploiIndividu("FRANCK", "SDEI", date(1965, 8, 23), "165080325417674"), 837, "PIJ"),
-            (PoleEmploiIndividu("JEAN-PIERRE", "CAILLARD", date(1966, 9, 1), "166092432200134"), 838, "CAF"),
+            # (PoleEmploiIndividu("LARBI", "BOUKERMA BACHIR", date(1965, 3, 14), "165039935804935"), 837, "OACAS"),
+            # (PoleEmploiIndividu("CHRISTOPHE", "WAROUX", date(1963, 9, 29), "163097510412579"), 838, "ML"),
+            # (PoleEmploiIndividu("QUENTIN", "SYLVESTRE", date(1996, 4, 3), "196044732303431"), 839, "DEPT"),
+            # (PoleEmploiIndividu("LUCAS", "VILLATTE", date(1997, 3, 3), "197032432218776"), 840, "DEPT_BRSA"),
+            # (PoleEmploiIndividu("ISABELLE", "LAVIALLE", date(1967, 4, 11), "267047836103209"), 836, "SPIP"),
+            # (PoleEmploiIndividu("PAOLO", "DE JESUS", date(1971, 10, 26), "171102452005024"), 837, "CCAS"),
+            # (PoleEmploiIndividu("JEAN-FRANCOIS", "VERGNE", date(1974, 11, 3), "174112452001129"), 838, "PLIE"),
+            # (PoleEmploiIndividu("FABIENNE", "CHEVALIER", date(1964, 6, 20), "264067724306041"), 839, "CHRS"),
+            # (PoleEmploiIndividu("CLAUDE", "CASTAGNAU", date(1965, 4, 12), "265047511429164"), 840, "PREVENTION"),
+            # (PoleEmploiIndividu("FARID", "ROCHDI", date(1968, 3, 3), "168036444502392"), 836, "AFPA"),
+            # (PoleEmploiIndividu("FRANCK", "SDEI", date(1965, 8, 23), "165080325417674"), 837, "PIJ"),
+            # (PoleEmploiIndividu("JEAN-PIERRE", "CAILLARD", date(1966, 9, 1), "166092432200134"), 838, "CAF"),
+            (PoleEmploiIndividu("Elisabeth", "BRAILLY", date(1969, 6, 8), "269068000102229"), 836, "CIDFF"),
+            (PoleEmploiIndividu("Pepito", "GONZALEZ", date(1959, 10, 17), "159102452035219"), 837, "OACAS"),
+            (PoleEmploiIndividu("Hamid", "BOUDALI", date(1971, 9, 18), "171092403706134"), 838, "ML"),
+            (PoleEmploiIndividu("JEAN", "LAPORTE", date(1959, 5, 9), "159051903103130"), 839, "DEPT"),
         ]
 
         for i in range(len(individuals)):
@@ -160,12 +166,12 @@ class Command(BaseCommand):
             # print(individual.as_api_params())
             print("retour d’API rechercherIndividuCertifie:")
             print(individual_pole_emploi.data)
-            # print()
+            print()
             if individual_pole_emploi.is_valid:
                 params = self.generate_sample_api_params(individual_pole_emploi.id_national_demandeur)
                 params["typeSIAE"] = code_siae
                 params["typologiePrescripteur"] = code_prescripteur
-                if i == 4:
+                if i % 2 == 0:
                     # un des cas de tests doit avoir ce siret,
                     params["numSIRETsiae"] = "53423021400023"
                 print("Données envoyées à MiseAJourPassIAE")
