@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from itou.common_apps.admin import admin as admin_common
+
 from .models import LaborInspectorInvitation, PrescriberWithOrgInvitation, SiaeStaffInvitation
 
 
@@ -19,7 +21,7 @@ class IsValidFilter(admin.SimpleListFilter):
         return queryset
 
 
-class BaseInvitationAdmin(admin.ModelAdmin):
+class BaseInvitationAdmin(admin_common.BaseAdmin):
     date_hierarchy = "sent_at"
     list_display = ("email", "first_name", "last_name", "sender", "sent_at", "is_valid", "accepted")
     ordering = ("-sent_at",)

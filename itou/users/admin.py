@@ -6,6 +6,7 @@ from django.db.models import Exists, OuterRef
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from itou.common_apps.admin import admin as admin_common
 from itou.institutions.models import InstitutionMembership
 from itou.prescribers.models import PrescriberMembership
 from itou.siaes.models import SiaeMembership
@@ -148,7 +149,7 @@ class CreatedByProxyFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.User)
-class ItouUserAdmin(UserAdmin):
+class ItouUserAdmin(admin_common.BaseAdmin, UserAdmin):
 
     form = UserAdminForm
     inlines = UserAdmin.inlines + [
@@ -263,7 +264,7 @@ class ItouUserAdmin(UserAdmin):
 
 
 @admin.register(models.JobSeekerProfile)
-class JobSeekerProfileAdmin(admin.ModelAdmin):
+class JobSeekerProfileAdmin(admin_common.BaseAdmin):
     """
     Inlines would only be possible the other way around
     """

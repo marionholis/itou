@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-import itou.employee_record.models as models
+from itou.common_apps.admin import admin as admin_common
+from itou.employee_record import models
 
 
 @admin.register(models.EmployeeRecord)
-class EmployeeRecordAdmin(admin.ModelAdmin):
+class EmployeeRecordAdmin(admin_common.BaseAdmin):
     @admin.action(description="Marquer les fiches salarié selectionnées comme COMPLETÉES")
     def update_employee_record_as_ready(self, _request, queryset):
         queryset.update(status=models.EmployeeRecord.Status.READY)

@@ -6,6 +6,7 @@ from django.contrib.gis.db import models as gis_models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from itou.common_apps.admin import admin as admin_common
 from itou.common_apps.organizations.admin import HasMembersFilter, MembersInline, OrganizationAdmin
 from itou.siaes import models
 from itou.siaes.admin_forms import SiaeAdminForm
@@ -159,13 +160,13 @@ class SiaeAdmin(OrganizationAdmin):
 
 
 @admin.register(models.SiaeJobDescription)
-class SiaeJobDescription(admin.ModelAdmin):
+class SiaeJobDescription(admin_common.BaseAdmin):
     list_display = ("appellation", "siae", "created_at", "updated_at", "is_active", "custom_name")
     raw_id_fields = ("appellation", "siae")
 
 
 @admin.register(models.SiaeConvention)
-class SiaeConvention(admin.ModelAdmin):
+class SiaeConvention(admin_common.BaseAdmin):
     list_display = ("kind", "siret_signature", "is_active")
     list_filter = ("kind", "is_active")
     raw_id_fields = ("reactivated_by",)
@@ -229,7 +230,7 @@ class SiaeConvention(admin.ModelAdmin):
 
 
 @admin.register(models.SiaeFinancialAnnex)
-class SiaeFinancialAnnex(admin.ModelAdmin):
+class SiaeFinancialAnnex(admin_common.BaseAdmin):
     list_display = ("number", "state", "start_at", "end_at")
     list_filter = ("state",)
     raw_id_fields = ("convention",)

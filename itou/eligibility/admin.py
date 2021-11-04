@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.template.defaultfilters import date as date_filter
 
+from itou.common_apps.admin import admin as admin_common
 from itou.eligibility import models
 
 
@@ -44,7 +45,7 @@ class HasApprovalFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.EligibilityDiagnosis)
-class EligibilityDiagnosisAdmin(admin.ModelAdmin):
+class EligibilityDiagnosisAdmin(admin_common.BaseAdmin):
     list_display = (
         "pk",
         "job_seeker",
@@ -106,7 +107,7 @@ class EligibilityDiagnosisAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.AdministrativeCriteria)
-class AdministrativeCriteriaAdmin(admin.ModelAdmin):
+class AdministrativeCriteriaAdmin(admin_common.BaseAdmin):
     list_display = ("pk", "name", "level", "ui_rank", "created_at")
     list_display_links = ("pk", "name")
     list_filter = ("level",)

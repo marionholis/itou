@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.db.models import Count
 
+from itou.common_apps.admin import admin as admin_common
+
 
 class MembersInline(admin.TabularInline):
     # Remember to specify the model in child class. Example:
@@ -26,7 +28,7 @@ class HasMembersFilter(admin.SimpleListFilter):
         return queryset
 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(admin_common.BaseAdmin):
     def member_count(self, obj):
         return obj._member_count
 

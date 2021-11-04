@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from itou.common_apps.admin import admin as admin_common
 from itou.job_applications import models
 
 
@@ -37,7 +38,7 @@ class ManualApprovalDeliveryRequiredFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.JobApplication)
-class JobApplicationAdmin(admin.ModelAdmin):
+class JobApplicationAdmin(admin_common.BaseAdmin):
     date_hierarchy = "created_at"
     list_display = ("pk", "state", "sender_kind", "created_at")
     raw_id_fields = (
@@ -85,7 +86,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.JobApplicationTransitionLog)
-class JobApplicationTransitionLogAdmin(admin.ModelAdmin):
+class JobApplicationTransitionLogAdmin(admin_common.BaseAdmin):
     actions = None
     date_hierarchy = "timestamp"
     list_display = ("job_application", "transition", "from_state", "to_state", "user", "timestamp")

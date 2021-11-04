@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from itou.asp import models
+from itou.common_apps.admin import admin as admin_common
 
 
 class PeriodFilter(admin.SimpleListFilter):
@@ -37,7 +38,7 @@ class CountryFilter(admin.SimpleListFilter):
         return queryset
 
 
-class ASPModelAdmin(admin.ModelAdmin):
+class ASPModelAdmin(admin_common.BaseAdmin):
     list_display = ("pk", "code", "name", "start_date", "end_date")
     list_filter = (PeriodFilter,)
     readonly_fields = ("pk",)
@@ -58,7 +59,7 @@ class DepartmentAdmin(ASPModelAdmin):
 
 
 @admin.register(models.Country)
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(admin_common.BaseAdmin):
     list_display = ("pk", "code", "name")
     readonly_fields = ("pk",)
     ordering = ("name",)

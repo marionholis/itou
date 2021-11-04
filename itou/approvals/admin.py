@@ -4,6 +4,7 @@ from django.urls import path
 from itou.approvals import models
 from itou.approvals.admin_forms import ApprovalAdminForm
 from itou.approvals.admin_views import manually_add_approval, manually_refuse_approval
+from itou.common_apps.admin import admin as admin_common
 from itou.job_applications.models import JobApplication
 
 
@@ -79,7 +80,7 @@ class IsValidFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.Approval)
-class ApprovalAdmin(admin.ModelAdmin):
+class ApprovalAdmin(admin_common.BaseAdmin):
     form = ApprovalAdminForm
     list_display = ("pk", "number", "user", "start_at", "end_at", "is_valid", "created_at")
     search_fields = ("pk", "number", "user__first_name", "user__last_name", "user__email")
@@ -150,7 +151,7 @@ class IsInProgressFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.Suspension)
-class SuspensionAdmin(admin.ModelAdmin):
+class SuspensionAdmin(admin_common.BaseAdmin):
     list_display = ("pk", "approval", "start_at", "end_at", "created_at", "is_in_progress")
     list_display_links = ("pk", "approval")
     raw_id_fields = ("approval", "siae", "created_by", "updated_by")
@@ -174,7 +175,7 @@ class SuspensionAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Prolongation)
-class ProlongationAdmin(admin.ModelAdmin):
+class ProlongationAdmin(admin_common.BaseAdmin):
     list_display = (
         "pk",
         "approval",
@@ -225,7 +226,7 @@ class ProlongationAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.PoleEmploiApproval)
-class PoleEmploiApprovalAdmin(admin.ModelAdmin):
+class PoleEmploiApprovalAdmin(admin_common.BaseAdmin):
     list_display = (
         "pk",
         "pole_emploi_id",
