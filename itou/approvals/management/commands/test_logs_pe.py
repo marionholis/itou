@@ -151,10 +151,16 @@ class Command(BaseCommand):
             # (PoleEmploiIndividu("FARID", "ROCHDI", date(1968, 3, 3), "168036444502392"), 836, "AFPA"),
             # (PoleEmploiIndividu("FRANCK", "SDEI", date(1965, 8, 23), "165080325417674"), 837, "PIJ"),
             # (PoleEmploiIndividu("JEAN-PIERRE", "CAILLARD", date(1966, 9, 1), "166092432200134"), 838, "CAF"),
-            (PoleEmploiIndividu("Elisabeth", "BRAILLY", date(1969, 6, 8), "269068000102229"), 836, "CIDFF"),
-            (PoleEmploiIndividu("Pepito", "GONZALEZ", date(1959, 10, 17), "159102452035219"), 837, "OACAS"),
-            (PoleEmploiIndividu("Hamid", "BOUDALI", date(1971, 9, 18), "171092403706134"), 838, "ML"),
-            (PoleEmploiIndividu("JEAN", "LAPORTE", date(1959, 5, 9), "159051903103130"), 839, "DEPT"),
+            # (PoleEmploiIndividu("Elisabeth", "BRAILLY", date(1969, 6, 8), "269068000102229"), 836, "CIDFF"),
+            # (PoleEmploiIndividu("Pepito", "GONZALEZ", date(1959, 10, 17), "159102452035219"), 837, "OACAS"),
+            # (PoleEmploiIndividu("Hamid", "BOUDALI", date(1971, 9, 18), "171092403706134"), 838, "ML"),
+            # (PoleEmploiIndividu("JEAN", "LAPORTE", date(1959, 5, 9), "159051903103130"), 839, "DEPT"),
+            # Candidats envoyés le 10/11
+            (PoleEmploiIndividu("JENNIFER", "GOURVAT", date(1994, 1, 29), "294019304835129"), 836, "CIDFF"),
+            (PoleEmploiIndividu("OSCAR", "ZAPPELLA", date(1965, 4, 2), "165047850000390"), 837, "OACAS"),
+            (PoleEmploiIndividu("MARIE", "CHALONS", date(1959, 8, 5), "259083726102916"), 838, "ML"),
+            (PoleEmploiIndividu("DAVID", "PICCIN", date(1978, 3, 11), "178034731002238"), 839, "DEPT"),
+            (PoleEmploiIndividu("GREGOIRE", "DELMAS", date(1979, 6, 3), "179062452001390"), 840, "CAF"),
         ]
 
         for i in range(len(individuals)):
