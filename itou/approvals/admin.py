@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+from django.urls.base import reverse
+from django.utils.html import format_html
 
 from itou.approvals import models
 from itou.approvals.admin_forms import ApprovalAdminForm
@@ -22,14 +24,34 @@ class JobApplicationInline(admin.StackedInline):
         "approval_number_sent_at",
         "approval_delivery_mode",
         "approval_manually_delivered_by",
+        "employee_record_status",
     )
-    raw_id_fields = ("job_seeker", "to_siae", "approval_manually_delivered_by")
+    raw_id_fields = (
+        "job_seeker",
+        "to_siae",
+        "approval_manually_delivered_by",
+    )
+
+    # Mandatory for "custom" inline fields
+    readonly_fields = ("employee_record_status",)
 
     def has_change_permission(self, request, obj=None):
         return False
 
     def has_add_permission(self, request, obj=None):
         return False
+
+    # Custom read-only fields as workaround :
+    # there is no direct relation between approvals and employee records
+    # (YET...)
+    @admin.display(description="Statut de la fiche salarié")
+    def employee_record_status(self, obj):
+        if employee_record := obj.employee_record.first():
+            url = reverse("admin:employee_record_employeerecord_change", args=[employee_record.id])
+            display = employee_record.get_status_display()
+            return format_html(f"<a href='{url}'><b>{display} (ID : {employee_record.id})</b></a>")
+
+        return "Pas de fiche salarié crée pour cette candidature"
 
 
 class SuspensionInline(admin.TabularInline):
