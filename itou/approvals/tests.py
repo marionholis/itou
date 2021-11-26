@@ -424,9 +424,8 @@ class ApprovalModelTest(TestCase):
     def test_can_be_unsuspended_with_suspension(self):
         today = timezone.now().date()
         approval_start_at = today - relativedelta(months=3)
-        reasons_to_open_process = [Suspension.Reason.BROKEN_CONTRACT.value, Suspension.Reason.FINISHED_CONTRACT.value]
         reasons_to_not_open_process = [
-            reason.value for reason in Suspension.Reason if reason not in reasons_to_open_process
+            reason.value for reason in Suspension.Reason if reason.value not in Suspension.REASONS_TO_UNSUSPEND
         ]
 
         for reason_to_refuse in reasons_to_not_open_process:
@@ -441,7 +440,7 @@ class ApprovalModelTest(TestCase):
             suspension.delete()
             approval.delete()
 
-        for reason in reasons_to_open_process:
+        for reason in Suspension.REASONS_TO_UNSUSPEND:
             approval = ApprovalFactory(start_at=approval_start_at)
             suspension = SuspensionFactory(
                 approval=approval,
