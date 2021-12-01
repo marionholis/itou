@@ -670,6 +670,7 @@ STORAGE_UPLOAD_KINDS = {
 # "Proof of record" model field is erased after this delay (in days)
 EMPLOYEE_RECORD_ARCHIVING_DELAY_IN_DAYS = int(os.environ.get("EMPLOYEE_RECORD_ARCHIVING_DELAY_IN_DAYS", 13 * 30))
 
+
 # This is the official and final production phase date of the employee record feature.
 # It is used as parameter to filter the eligible job applications for the feature.
 # (no job application before this date can be used for this feature)
