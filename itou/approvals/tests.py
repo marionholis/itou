@@ -946,6 +946,32 @@ class SuspensionModelTest(TestCase):
     Test Suspension model.
     """
 
+    def test_clean(self):
+        today = timezone.now().date()
+        start_at = today - relativedelta(days=Suspension.MAX_RETROACTIVITY_DURATION_DAYS * 2)
+        end_at = start_at + relativedelta(months=2)
+        approval = ApprovalFactory.build(start_at=start_at, end_at=end_at)
+
+        # Suspension.start_date is too old.
+        suspension = SuspensionFactory.build(approval=approval)
+        suspension.start_at = start_at - relativedelta(days=Suspension.MAX_RETROACTIVITY_DURATION_DAYS + 1)
+        with self.assertRaises(ValidationError):
+            suspension.clean()
+
+        # suspension.end_at < suspension.start_at
+        suspension = SuspensionFactory.build(approval=approval)
+        suspension.start_at = start_at
+        suspension.end_at = start_at - relativedelta(months=1)
+        with self.assertRaises(ValidationError):
+            suspension.clean()
+
+        # Suspension.start_at is in the future.
+        suspension = SuspensionFactory.build(approval=approval)
+        suspension.start_at = today + relativedelta(days=2)
+        suspension.end_at = end_at
+        with self.assertRaises(ValidationError):
+            suspension.clean()
+
     def test_duration(self):
         expected_duration = datetime.timedelta(days=2)
         start_at = timezone.now().date()
